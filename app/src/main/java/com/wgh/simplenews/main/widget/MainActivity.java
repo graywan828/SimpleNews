@@ -1,6 +1,5 @@
 package com.wgh.simplenews.main.widget;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -13,31 +12,35 @@ import com.wgh.simplenews.R;
 import com.wgh.simplenews.base.BaseActivity;
 import com.wgh.simplenews.main.presenter.MainPresenter;
 import com.wgh.simplenews.main.view.MainView;
+import com.wgh.simplenews.news.NewsFragment;
 
 import butterknife.Bind;
 
 public class MainActivity extends BaseActivity implements MainView{
 
     @Bind(R.id.drawer_layout)DrawerLayout mDrawerLayout;
-    @Bind(R.id.appbar)Toolbar mToolbar;
-    @Bind(R.id.navigation_view) private NavigationView mNavigationView;
+    @Bind(R.id.toolbar)Toolbar mToolbar;
+    @Bind(R.id.navigation_view) NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
     private MainPresenter mMainPresenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void setContentView() {
         setContentView(R.layout.activity_main);
     }
 
     @Override
     protected void initView() {
+
         setSupportActionBar(mToolbar);
 
         mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.drawer_open,R.string.drawer_close);
+        mDrawerToggle.syncState();
         setupDrawerContent(mNavigationView);
 
         mMainPresenter = new MainPresenter(this);
+
+        switch2News();
     }
 
     @Override
@@ -69,21 +72,25 @@ public class MainActivity extends BaseActivity implements MainView{
 
     @Override
     public void switch2News() {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new NewsFragment()).commit();
+        mToolbar.setTitle(R.string.navigation_news);
     }
 
     @Override
     public void switch2Images() {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new NewsFragment()).commit();
+        mToolbar.setTitle(R.string.navigation_images);
     }
 
     @Override
     public void switch2Weather() {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new NewsFragment()).commit();
+        mToolbar.setTitle(R.string.navigation_weather);
     }
 
     @Override
     public void switch2About() {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new NewsFragment()).commit();
+        mToolbar.setTitle(R.string.navigation_about);
     }
 }

@@ -1,5 +1,7 @@
 package com.wgh.simplenews.utils;
 
+import android.util.Log;
+
 import com.orhanobut.logger.Logger;
 
 public class LogUtils {
@@ -53,7 +55,7 @@ public class LogUtils {
 
     public static void e(String tag, String message) {
         if(DEBUG) {
-            Logger.e(tag, message);
+            Log.e(tag, message);
         }
     }
 

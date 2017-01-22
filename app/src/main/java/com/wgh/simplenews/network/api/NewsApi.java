@@ -12,7 +12,7 @@ import rx.Observable;
 
 public interface NewsApi {
 
-    @GET("{path}/{id}/{index}-20.html")
+    @GET("{path}{id}/{index}-20.html")
     Observable<String> getNews(@Path("path")String path,@Path("id")String urlId,@Path("index")int pageIndex);
 
 }

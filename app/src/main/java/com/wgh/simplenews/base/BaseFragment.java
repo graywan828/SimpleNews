@@ -25,8 +25,8 @@ public abstract class BaseFragment extends Fragment{
 
         mContext = getActivity();
 
-        registerListener();
         initViews();
+        registerListener();
         initData();
     }
 

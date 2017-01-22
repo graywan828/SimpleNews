@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.wgh.simplenews.R;
 import com.wgh.simplenews.base.BaseFragment;
+import com.wgh.simplenews.news.widget.NewsListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +55,10 @@ public class NewsFragment extends BaseFragment{
         mViewPager.setOffscreenPageLimit(3);
         setupViewPager();
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.top));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.nba));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.cars));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.jokes));
+//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.nba));
+//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.cars));
+//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.jokes));
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -67,8 +69,10 @@ public class NewsFragment extends BaseFragment{
 
     private void setupViewPager() {
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
-//        adapter.add
-
+        adapter.addFragment(NewsListFragment.getInstance(NEWS_TYPE_TOP),getString(R.string.top));
+//        adapter.addFragment(NewsListFragment.getInstance(NEWS_TYPE_NBA),getString(R.string.nba));
+//        adapter.addFragment(NewsListFragment.getInstance(NEWS_TYPE_CARS),getString(R.string.cars));
+//        adapter.addFragment(NewsListFragment.getInstance(NEWS_TYPE_JOKES),getString(R.string.jokes));
         mViewPager.setAdapter(adapter);
 
     }

@@ -31,10 +31,11 @@ public class OkHttpUtils {
 
     private OkHttpUtils(){
         mOkHttpClient = new OkHttpClient().newBuilder()
-        .connectTimeout(60, TimeUnit.SECONDS)
-        .readTimeout(60,TimeUnit.SECONDS)
-        .writeTimeout(60,TimeUnit.SECONDS)
-        .build();
+                .addInterceptor(new HttpInterceptor())
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60,TimeUnit.SECONDS)
+                .writeTimeout(60,TimeUnit.SECONDS)
+                .build();
     }
 
     public synchronized static OkHttpUtils getInstance() {
@@ -44,7 +45,7 @@ public class OkHttpUtils {
         return mInstance;
     }
 
-    private NewsApi getNewsApi(){
+    public NewsApi getNewsApi(){
         if (newsApi == null){
             Retrofit retrofit = new Retrofit.Builder()
                     .client(mOkHttpClient)
