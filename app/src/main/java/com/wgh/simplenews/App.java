@@ -23,6 +23,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        Logger.init(TAG);
+        Logger.init(TAG)
+        .methodCount(2)
+        .hideThreadInfo();
     }
 }

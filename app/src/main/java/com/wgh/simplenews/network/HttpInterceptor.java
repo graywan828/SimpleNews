@@ -18,6 +18,9 @@ import okhttp3.Response;
  */
 
 public class HttpInterceptor implements Interceptor {
+
+    private static String TAG = "HttpInterceptor";
+
     @Override
     public Response intercept(Chain chain) throws IOException {
 

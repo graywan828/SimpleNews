@@ -6,17 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import rx.Subscription;
-
 /**
  * @version V1.0.0
  * @author: guanghui_wan
  * @date: 2017/1/18
  */
 
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment{
 
-    protected Subscription subscription;
+    protected P mPresenter;
     public Context mContext;
 
     @Override
@@ -48,12 +46,5 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unsubscribe();
-    }
-
-    protected void unsubscribe() {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
     }
 }

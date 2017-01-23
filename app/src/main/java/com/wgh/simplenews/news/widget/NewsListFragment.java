@@ -16,21 +16,15 @@ import android.view.ViewGroup;
 import com.wgh.simplenews.R;
 import com.wgh.simplenews.base.BaseFragment;
 import com.wgh.simplenews.beans.NewsBean;
-import com.wgh.simplenews.network.OkHttpUtils;
-import com.wgh.simplenews.network.Urls;
 import com.wgh.simplenews.news.NewsAdapter;
 import com.wgh.simplenews.news.NewsFragment;
+import com.wgh.simplenews.news.presenter.NewsPresenter;
 import com.wgh.simplenews.news.view.NewsView;
-import com.wgh.simplenews.utils.LogUtils;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +38,7 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
 
     private LinearLayoutManager mLayoutManager;
     private NewsAdapter mAdapter;
+    private NewsPresenter mNewsPresenter;
 
     private int mType = NewsFragment.NEWS_TYPE_TOP;
     private int pageIndex = 0;
@@ -60,6 +55,7 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mType = getArguments().getInt("type");
+        mNewsPresenter = new NewsPresenter(mType,this,subscription);
     }
 
     @Override
@@ -85,7 +81,7 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
                         &&lastVisibleItem + 1 == mAdapter.getItemCount()
                         &&mAdapter.isShowFooter()){
 
-                    requestNews();
+                    mNewsPresenter.loadNews(pageIndex);
 
                 }
             }
@@ -97,41 +93,6 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
             }
         });
     }
-
-    private void requestNews() {
-        subscription = OkHttpUtils.getInstance().getNewsApi()
-                .getNews(Urls.TOP_PATH,Urls.TOP_ID,pageIndex)
-                .map(new Func1<String, List<NewsBean>>() {
-                    @Override
-                    public List<NewsBean> call(String s) {
-
-                        return null;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mObserver);
-    }
-
-    Observer<List<NewsBean>> mObserver = new Observer<List<NewsBean>>() {
-        @Override
-        public void onCompleted() {
-            hideProgress();
-            LogUtils.e("onCompleted");
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            hideProgress();
-            LogUtils.e("onError  "  + e.getMessage());
-        }
-
-        @Override
-        public void onNext(List<NewsBean> newsBeanList) {
-            hideProgress();
-        }
-
-    };
 
     @Override
     protected void initViews() {
@@ -147,12 +108,11 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
     @Override
     protected void initData() {
 //        onRefresh();
-            requestNews();
+        mNewsPresenter.loadNews(pageIndex);
     }
 
     @Override
     public void addNews(List<NewsBean> newsList) {
-
     }
 
     @Override
