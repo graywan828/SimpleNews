@@ -10,7 +10,6 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * @version V1.0.0
@@ -21,11 +20,9 @@ import rx.subscriptions.CompositeSubscription;
 
 public class NewsModel {
 
-    private CompositeSubscription compositeSubscription;
     private int type;
 
-    public NewsModel(CompositeSubscription compositeSubscription,int type) {
-        this.compositeSubscription = compositeSubscription;
+    public NewsModel(int type) {
         this.type = type;
     }
 

@@ -1,6 +1,9 @@
 package com.wgh.simplenews.base;
 
-import rx.Subscription;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -21,20 +24,23 @@ public class BasePresenter<V>{
 
     public void detachView(){
         this.mvpView = null;
-        unSubscribe();
+        onUnSubscribe();
     }
 
-    protected void unSubscribe() {
+    protected void onUnSubscribe() {
         if (mCompositeSubscription != null) {
             mCompositeSubscription.unsubscribe();
         }
     }
 
-    protected void addSubscrebe(Subscription subscription) {
+    protected void addSubscription(Observable observable, Subscriber subscriber) {
         if (mCompositeSubscription == null) {
             mCompositeSubscription = new CompositeSubscription();
         }
-        mCompositeSubscription.add(subscription);
+        mCompositeSubscription.add(observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber));
     }
 
 }
