@@ -17,8 +17,8 @@ public abstract class MvpFragment<P extends BasePresenter> extends BaseFragment 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         mvpPresenter = createPresenter();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     protected abstract P createPresenter();

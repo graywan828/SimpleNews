@@ -14,13 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wgh.simplenews.R;
-import com.wgh.simplenews.base.BaseFragment;
+import com.wgh.simplenews.base.MvpFragment;
 import com.wgh.simplenews.beans.NewsBean;
+import com.wgh.simplenews.network.Urls;
 import com.wgh.simplenews.news.NewsAdapter;
-import com.wgh.simplenews.news.NewsFragment;
 import com.wgh.simplenews.news.presenter.NewsPresenter;
 import com.wgh.simplenews.news.view.NewsView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsListFragment extends BaseFragment implements NewsView, SwipeRefreshLayout.OnRefreshListener {
+public class NewsListFragment extends MvpFragment<NewsPresenter> implements NewsView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "NewsListFragment";
 
@@ -38,7 +39,8 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
 
     private LinearLayoutManager mLayoutManager;
     private NewsAdapter mAdapter;
-    private NewsPresenter mNewsPresenter;
+
+    private List<NewsBean> mData;
 
     private int mType = NewsFragment.NEWS_TYPE_TOP;
     private int pageIndex = 0;
@@ -55,7 +57,6 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mType = getArguments().getInt("type");
-        mNewsPresenter = new NewsPresenter(mType,this,subscription);
     }
 
     @Override
@@ -68,6 +69,7 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
 
     @Override
     protected void registerListener() {
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -81,7 +83,7 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
                         &&lastVisibleItem + 1 == mAdapter.getItemCount()
                         &&mAdapter.isShowFooter()){
 
-                    mNewsPresenter.loadNews(pageIndex);
+                    mvpPresenter.loadNews(pageIndex);
 
                 }
             }
@@ -92,6 +94,11 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
                 lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             }
         });
+    }
+
+    @Override
+    protected NewsPresenter createPresenter() {
+        return new NewsPresenter(this,mType);
     }
 
     @Override
@@ -108,11 +115,28 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
     @Override
     protected void initData() {
 //        onRefresh();
-        mNewsPresenter.loadNews(pageIndex);
+        mvpPresenter.loadNews(pageIndex);
     }
 
     @Override
     public void addNews(List<NewsBean> newsList) {
+
+        mAdapter.isShowFooter(true);
+        if(mData == null){
+            mData = new ArrayList<>();
+        }
+
+        mData.addAll(newsList);
+
+        if(pageIndex == 0){
+            mAdapter.setmDate(mData);
+        }else {
+            if(newsList ==null&& newsList.size() == 0){
+                mAdapter.isShowFooter(false);
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+        pageIndex += Urls.PAZE_SIZE;
     }
 
     @Override
@@ -133,5 +157,11 @@ public class NewsListFragment extends BaseFragment implements NewsView, SwipeRef
     @Override
     public void onRefresh() {
 
+        pageIndex = 0;
+        if(mData !=null){
+            mData.clear();
+        }
+        mvpPresenter.loadNews(pageIndex);
     }
+
 }

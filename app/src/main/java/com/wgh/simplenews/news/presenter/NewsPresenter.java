@@ -1,16 +1,17 @@
 package com.wgh.simplenews.news.presenter;
 
+import com.wgh.simplenews.base.BasePresenter;
 import com.wgh.simplenews.beans.NewsBean;
+import com.wgh.simplenews.network.OkHttpUtils;
 import com.wgh.simplenews.network.Urls;
-import com.wgh.simplenews.news.NewsFragment;
-import com.wgh.simplenews.news.model.NewsModel;
+import com.wgh.simplenews.news.NewsResult2ItemsMapper;
 import com.wgh.simplenews.news.view.NewsView;
+import com.wgh.simplenews.news.widget.NewsFragment;
 import com.wgh.simplenews.utils.LogUtils;
 
 import java.util.List;
 
-import rx.Observer;
-import rx.Subscription;
+import rx.Subscriber;
 
 /**
  * @version V1.0.0
@@ -19,17 +20,13 @@ import rx.Subscription;
  * @description
  */
 
-public class NewsPresenter {
+public class NewsPresenter extends BasePresenter<NewsView>{
 
-    private NewsView mNewsView;
-    private NewsModel mNewsModel;
     private int type;
 
-    public NewsPresenter(int type, NewsView newsView, Subscription subscription) {
+    public NewsPresenter(NewsView newsView,int type) {
+        attachView(newsView);
         this.type = type;
-        mNewsView = newsView;
-        //TODO
-//        mNewsModel = new NewsModel(type);
     }
 
     public void loadNews(int pageIndex) {
@@ -57,28 +54,39 @@ public class NewsPresenter {
 
         }
 
-        mNewsModel.loadNews(newsPath, newsId, pageIndex,mObserver);
+//        loadNews(newsPath, newsId, 20);
+        loadNews(newsPath, newsId, pageIndex);
 
     }
 
-    Observer<List<NewsBean>> mObserver = new Observer<List<NewsBean>>() {
-        @Override
-        public void onCompleted() {
-            mNewsView.hideProgress();
-        }
+    private void loadNews(String newsPath, String newsId, int pageIndex) {
 
-        @Override
-        public void onError(Throwable e) {
-            mNewsView.hideProgress();
-            LogUtils.e("onError  "  + e.getMessage());
-        }
+        LogUtils.e(newsPath +  " ... " + newsId+" ... "+ pageIndex);
 
-        @Override
-        public void onNext(List<NewsBean> newsBeanList) {
+        addSubscription(OkHttpUtils.getInstance().getNewsApi()
+                .getNews(newsPath,newsId,pageIndex)
+                .map(new NewsResult2ItemsMapper(type))
+                ,new Subscriber<List<NewsBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        mvpView.hideProgress();
+                        LogUtils.e("onCompleted");
+                    }
 
-            mNewsView.addNews(newsBeanList);
+                    @Override
+                    public void onError(Throwable e) {
+                        mvpView.hideProgress();
+                        LogUtils.e("onError  "  + e.getMessage());
+                    }
 
-        }
+                    @Override
+                    public void onNext(List<NewsBean> newsBeanList) {
 
-    };
+                        mvpView.addNews(newsBeanList);
+                        LogUtils.e("onNext");
+                    }
+                });
+
+    }
+
 }
