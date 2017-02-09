@@ -1,7 +1,6 @@
 package com.wgh.simplenews.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 /**
  * @version V1.0.0
@@ -9,15 +8,14 @@ import android.os.PersistableBundle;
  * @date: 2017/2/8
  * @description
  */
-
 public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity {
 
     protected P mvpPresenter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+    public void onCreate(Bundle savedInstanceState) {
         mvpPresenter = createPresenter();
-        super.onCreate(savedInstanceState, persistentState);
+        super.onCreate(savedInstanceState);
     }
 
     protected abstract P createPresenter();

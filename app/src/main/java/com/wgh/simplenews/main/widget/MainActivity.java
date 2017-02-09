@@ -44,6 +44,16 @@ public class MainActivity extends BaseActivity implements MainView{
     }
 
     @Override
+    protected void registerListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
         return true;

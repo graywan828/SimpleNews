@@ -8,7 +8,6 @@ import com.wgh.simplenews.beans.NewsBean;
 import com.wgh.simplenews.network.Urls;
 import com.wgh.simplenews.news.widget.NewsFragment;
 import com.wgh.simplenews.utils.JsonUtils;
-import com.wgh.simplenews.utils.LogUtils;
 
 import java.util.List;
 
@@ -31,8 +30,6 @@ public class NewsResult2ItemsMapper implements Func1<String,List<NewsBean>> {
 
     @Override
     public List<NewsBean> call(String s) {
-
-        LogUtils.e(s);
 
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(s).getAsJsonObject();

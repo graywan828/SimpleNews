@@ -1,9 +1,12 @@
 package com.wgh.simplenews.news.widget;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -94,6 +97,8 @@ public class NewsListFragment extends MvpFragment<NewsPresenter> implements News
                 lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             }
         });
+
+
     }
 
     @Override
@@ -110,7 +115,23 @@ public class NewsListFragment extends MvpFragment<NewsPresenter> implements News
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new NewsAdapter(mContext);
         mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(mOnItemClickListener);
     }
+
+    NewsAdapter.OnItemClickListener mOnItemClickListener = new NewsAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            NewsBean bean = mAdapter.getItem(position);
+            Intent intent = new Intent(mContext,NewsDetailActivity.class);
+            intent.putExtra("news",bean);
+
+            View transitionView = view.findViewById(R.id.ivNews);
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(mContext,transitionView,getString(R.string.transition_news_img));
+            ActivityCompat.startActivity(mContext,intent,options.toBundle());
+        }
+    };
 
     @Override
     protected void initData() {

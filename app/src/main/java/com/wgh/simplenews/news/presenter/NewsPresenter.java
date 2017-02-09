@@ -70,20 +70,17 @@ public class NewsPresenter extends BasePresenter<NewsView>{
                     @Override
                     public void onCompleted() {
                         mvpView.hideProgress();
-                        LogUtils.e("onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         mvpView.hideProgress();
-                        LogUtils.e("onError  "  + e.getMessage());
                     }
 
                     @Override
                     public void onNext(List<NewsBean> newsBeanList) {
 
                         mvpView.addNews(newsBeanList);
-                        LogUtils.e("onNext");
                     }
                 });
 

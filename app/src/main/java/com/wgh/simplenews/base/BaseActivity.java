@@ -31,12 +31,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mActivity = this;
         initView();
+        registerListener();
+        initData();
     }
+
+
 
     protected abstract void setContentView();
 
     protected abstract void initView();
 
+    protected abstract void registerListener();
+
+    protected abstract void initData();
     @Override
     protected void onDestroy() {
         super.onDestroy();
