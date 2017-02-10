@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.wgh.simplenews.R;
 import com.wgh.simplenews.base.BaseActivity;
+import com.wgh.simplenews.images.ImageFragment;
 import com.wgh.simplenews.main.presenter.MainPresenter;
 import com.wgh.simplenews.main.view.MainView;
 import com.wgh.simplenews.news.widget.NewsFragment;
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity implements MainView{
 
     @Override
     public void switch2Images() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new NewsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ImageFragment()).commit();
         mToolbar.setTitle(R.string.navigation_images);
     }
 
