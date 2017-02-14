@@ -29,7 +29,6 @@ public class ImageFragment extends MvpFragment<ImagePresenter> implements Images
     SwipeRefreshLayout mSwipeRefreshLayout;
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
-
     private LinearLayoutManager mLayoutManager;
 
     @Nullable
