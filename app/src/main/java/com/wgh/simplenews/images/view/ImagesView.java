@@ -1,5 +1,9 @@
 package com.wgh.simplenews.images.view;
 
+import com.wgh.simplenews.beans.ImageBean;
+
+import java.util.List;
+
 /**
  * @version V1.0.0
  * @author: guanghui_wan
@@ -12,5 +16,7 @@ public interface ImagesView {
     void showProgress();
 
     void hideProgress();
+
+    void addImages(List<ImageBean> images);
 
 }

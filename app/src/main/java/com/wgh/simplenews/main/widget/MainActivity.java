@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.wgh.simplenews.R;
 import com.wgh.simplenews.base.BaseActivity;
-import com.wgh.simplenews.images.ImageFragment;
+import com.wgh.simplenews.images.widget.ImageFragment;
 import com.wgh.simplenews.main.presenter.MainPresenter;
 import com.wgh.simplenews.main.view.MainView;
 import com.wgh.simplenews.news.widget.NewsFragment;

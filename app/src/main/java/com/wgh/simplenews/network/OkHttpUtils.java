@@ -1,5 +1,6 @@
 package com.wgh.simplenews.network;
 
+import com.wgh.simplenews.network.api.ImageApi;
 import com.wgh.simplenews.network.api.NewsApi;
 
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,7 @@ public class OkHttpUtils {
     private static Converter.Factory gsonConverterFactory = GsonConverterFactory.create();
     private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
     private static NewsApi newsApi;
+    private static ImageApi imageApi;
 
     private OkHttpUtils(){
         mOkHttpClient = new OkHttpClient().newBuilder()
@@ -57,6 +59,20 @@ public class OkHttpUtils {
             newsApi = retrofit.create(NewsApi.class);
         }
         return newsApi;
+    }
+
+    public ImageApi getImageApi(){
+        if (imageApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(mOkHttpClient)
+                    .baseUrl(Urls.IMAGES_URL_HOST)
+                    .addConverterFactory(scalarsConverterFactory)
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            imageApi = retrofit.create(ImageApi.class);
+        }
+        return imageApi;
     }
 
 }

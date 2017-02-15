@@ -24,6 +24,7 @@ public class Urls {
     // nba
     public static final String NBA_ID = "T1348649145984";
 
+    public static final String IMAGES_URL_HOST = "http://api.laifudao.com/";
     // 图片
     public static final String IMAGES_URL = "http://api.laifudao.com/open/tupian.json";
 
